@@ -670,7 +670,7 @@ erDiagram
 
 
 
-### 总览
+## 总览
 
 教程列出了4项值得探究的功能，并根据实现难度做出了分级：
 
@@ -693,7 +693,7 @@ erDiagram
 
 
 
-### 简单：更强的敌人
+## 简单：更强的敌人
 
 添加一种更强的敌人，并随机选择出现哪种敌人。
 
@@ -721,7 +721,7 @@ erDiagram
 
 
 
-### 中等：追踪导弹
+## 中等：追踪导弹
 
 创建一种新的强化道具，使得玩家能够发射投射物击退敌人（或者在强化生效期间能够自动向各个方向发射投射物）
 
@@ -840,6 +840,106 @@ erDiagram
 > 根据12的经验，同样修改了下enemy脚本中获取Player的位置的代码，因为Player被销毁后，残留的enemy也会访问Player的空间
 >
 > ![image-20230610120232622](D:\CS\Unity\Junior Programmer\Create with Code 2\2-Gameplay Mechaincs.assets\image-20230610120232622.png)
+
+
+
+
+
+## 困难：粉碎冲击
+
+使用一个新的powerup，player能够跳起来，冲撞地面并击飞附近的敌人。理想情况下，敌人离得越近，受击越强。
+
+1. 选择pickup，拖入场景中，重命名为smash
+
+2. 添加Box Collider，Iso视角检查是否匹配
+
+3. 创建Smash脚本，创建Smash tag，应用到指示物上，将脚本赋给Player
+
+4. 写个协程控制定时
+
+   ```c#
+   IEnumerator SmashCoolDown()
+       {
+           yield return new WaitForSeconds(10);
+           Debug.Log("Smash Power Faded!");
+       }
+   ```
+
+5. 新建变量`smashTime`, `smashIndicator`，选择一个能力生效指示标（偷个懒，直接把瓶子立头顶算了），通过`SetActive`设置标记显示。同时让指示标随着小球移动
+
+   ```c#
+   smashIndicator.transform.position = transform.position + new Vector3(0f, 1.2f, 0f);
+   ```
+
+6. 实现跳跃逻辑，首先获取空格输入，这里设空格；创建`rb`和`hasJump`，设置`hasJump`防止左脚踩右脚上天。当玩家撞上地面的时候，设置`hasJump = false`
+
+   ```c#
+   void Update()
+       {
+           // get jump Input
+           if(!hasJump & Input.GetKeyDown(KeyCode.Space))
+           {
+               rb.velocity = Vector3.zero;
+               rb.AddForce(new Vector3(0, 10, 0), ForceMode.Impulse);
+               hasJump = true;
+           }
+       }
+   private void OnCollisionEnter(Collision collision)
+       {
+           if(collision.collider.CompareTag("Land"))
+           {
+               hasJump = false;
+           }
+       }
+   ```
+
+7. 实现冲击逻辑，对一定距离内的敌人造成冲击，可以先获取场景内的所有敌人，然后对`smashRange`内的敌人`AddForce`，该逻辑应该在落地的时候触发
+
+   ```c#
+   private void OnCollisionEnter(Collision collision)
+       {
+           if(hasJump && collision.collider.CompareTag("Land"))
+           {
+               hasJump = false;
+               // smash enemies in range
+               GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+               for(int i = 0; i < enemies.Length; i++)
+               {
+                   Vector3 direction = enemies[i].transform.position - transform.position;
+                   if (direction.magnitude < smashRange)
+                   {
+                       Rigidbody enemyRb = enemies[i].GetComponent<Rigidbody>();
+                       enemyRb.velocity = Vector3.zero;
+                       enemyRb.AddForce(direction.normalized * smashPower, ForceMode.Impulse);
+                   }
+               }
+           }
+       }
+   ```
+
+   顺带调整了下敌人的运动逻辑，因为之前的设计没改y值，敌人可以跟着飞
+
+   ```c#
+   enemyRb.AddForce(new Vector3(lookDirection.x, 0, lookDirection.z) * speed);
+   ```
+
+8. 声明`hasSmash`，只有当该变量为true的时候才能够对敌人产生冲击，顺带为了让跳跃速度更快，通过Constant Force组件给Player增加了`10`的向下力
+
+   ![image-20230728201047559](D:\CS\Unity\Junior Programmer\Create with Code 2\2-Gameplay Mechaincs.assets\image-20230728201047559.png)
+
+   推导一下，假设此前的向下的力为f，根据动量方程
+   $$
+   Ft = mv
+   $$
+   Impuse方法相当于直接加一个速度上去，t和m都是1，因此F变为2倍时，v也应该变为两倍，才能维持原有的高度
+
+   不过之前的高度有点高，微调了一下之后设为了15。
+
+9. 细微调整后，将Smash拾取物创建为Prefab，调整SpawnManager，引入新的拾取物。整理测试区。开发完毕。
+
+   
+
+   
 
 
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HarderEnemy : MonoBehaviour
 {
-    private float harderForce = 5.0f;
+    private float harderForce = 3.0f;
     // Start is called before the first frame update
     void Start()
     {

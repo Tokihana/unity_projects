@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\DestoryPlane.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Smash.cs" />
     <Compile Include="Assets\Challenge 4\Scripts\RotateCameraX.cs" />
     <Compile Include="Assets\Scripts\PlayAudio.cs" />
     <Compile Include="Assets\Scripts\HarderEnemy.cs" />

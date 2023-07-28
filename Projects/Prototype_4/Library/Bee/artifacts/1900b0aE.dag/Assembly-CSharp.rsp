@@ -365,6 +365,7 @@
 "Assets/Scripts/PlayAudio.cs"
 "Assets/Scripts/PlayerController.cs"
 "Assets/Scripts/RotateCamera.cs"
+"Assets/Scripts/Smash.cs"
 "Assets/Scripts/SpawnManager.cs"
 -langversion:9.0
 

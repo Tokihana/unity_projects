@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Powerup
   - FireIcon
+  - Smash
+  - Land
   layers:
   - Default
   - TransparentFX
