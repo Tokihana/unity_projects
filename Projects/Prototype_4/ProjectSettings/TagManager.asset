@@ -9,6 +9,7 @@ TagManager:
   - FireIcon
   - Smash
   - Land
+  - Indicator
   layers:
   - Default
   - TransparentFX

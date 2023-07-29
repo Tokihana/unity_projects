@@ -21,17 +21,21 @@ public class DestoryPlane : MonoBehaviour
     // this method is called when a Prefab collide with plane
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("Enemy"))
+        if(other.gameObject.CompareTag("Indicator"))
+        {
+            Destroy(other.gameObject);
+        }
+        else if(other.gameObject.CompareTag("Enemy"))
         {
             // Debug.Log("Destory Enemy");
             Destroy(other.gameObject);
             spawnManager.GetComponent<SpawnManager>().SubSpawnCount(1);
         }
-        if(other.gameObject.CompareTag("Player"))
+        else if(other.gameObject.CompareTag("Player"))
         {
             audioPlayer.GetComponent<PlayAudio>().WaveNegative();
             Destroy(other.gameObject);
-            spawnManager.GetComponent <SpawnManager>().SubSpawnCount(-10);
+            spawnManager.SetActive(false);
         }
     }
 }

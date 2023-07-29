@@ -11,7 +11,7 @@ public class BulletMove : MonoBehaviour
 
     // move status
     private float moveSpeed = 15f;
-    private float bulletForce = 10f;
+    private float bulletForce = 5f;
 
     // Start is called before the first frame update
     void Start()

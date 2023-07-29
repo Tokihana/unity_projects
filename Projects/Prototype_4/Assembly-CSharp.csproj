@@ -64,12 +64,14 @@
     <Compile Include="Assets\Challenge 4\Scripts\RotateCameraX.cs" />
     <Compile Include="Assets\Scripts\PlayAudio.cs" />
     <Compile Include="Assets\Scripts\HarderEnemy.cs" />
+    <Compile Include="Assets\Scripts\BossFire.cs" />
     <Compile Include="Assets\Challenge 4\Scripts\SpawnManagerX.cs" />
     <Compile Include="Assets\Challenge 4\Scripts\EnemyX.cs" />
     <Compile Include="Assets\Scripts\SpawnManager.cs" />
     <Compile Include="Assets\Scripts\RotateCamera.cs" />
     <Compile Include="Assets\Scripts\BulletMove.cs" />
     <Compile Include="Assets\Scripts\Fireup.cs" />
+    <Compile Include="Assets\Scripts\BossBullet.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Challenge 4\Scripts\PlayerControllerX.cs" />
   </ItemGroup>

@@ -939,9 +939,161 @@ erDiagram
 
    
 
+## 专家：Boss战
+
+在一定轮数开始Boss战，Boss有很多新能力，例如：发射子弹，移速更快，或者会召唤小弟
+
+（其实相当于前面的功能的大杂烩）
+
+看了眼示例视频，Boss更大，且能够调用SpawnManager生成新的敌人
+
+
+
+### 调整DestoryPlane
+
+首先修复下前面一个bug，当时DestroyPlane设置的是个平面，但是随着玩家的机动和击退更强，敌人可能被打上天，这时候没法结束当前轮次。
+
+试了挺多方法后，最后选择用6个Box Collider合成一个正方体来进行判断，毕竟目前能力有限。
+
+另外用协程在每轮之间加了3秒的间隔，同时调整了SpawnCount，不再用`+=`，而是直接赋值，防止因为一个球碰到两个边界导致的多次`--`
+
+写协程的时候一定要注意，不要让进入协程的代码出现多次调用，结果会很惨烈
+
+![](D:\CS\Unity\Junior Programmer\Create with Code 2\2-Gameplay Mechaincs.assets\9}G}EQJ7~YC514EA[O08[RE.png)
+
+
+
+### 设置Boss
+
+1. 准备从HarderEnemy派生出Boss来，并且让Boss更大更重一点（mass = 2）
+
+2. 让Boss可以捡玩家的道具:)
+
+   ```c#
+   // BossFire.cs
+   public class BossFire : MonoBehaviour
+   {
+       // Fire status
+       private float fireInterval = 0.5f;
+       private int fireTimes = 20;
    
+       // fireup indicator
+       public GameObject fireupIndicator;
+   
+       // bullet Prefab
+       public GameObject bulletPrefab;
+   
+       // player
+       public GameObject player;
+   
+       // Start is called before the first frame update
+       void Start()
+       {
+   
+       }
+   
+       // Update is called once per frame
+       void Update()
+       {
+           fireupIndicator.transform.position = transform.position + new Vector3(0, -0.3f, 0);
+       }
+   
+       private void OnTriggerEnter(Collider other)
+       {
+           if(other.gameObject.CompareTag("FireIcon"))
+           {
+               // Destory pickup
+               Destroy(other.gameObject);
+               // set indicator active
+               fireupIndicator.SetActive(true);
+               // start fire coroutine
+               StartCoroutine(FireCoolDown());
+           }
+       }
+   
+       IEnumerator FireCoolDown()
+       {
+           for (int i = 0; i < fireTimes; i++)
+           {
+               Vector3 direction = (player.transform.position - transform.position).normalized;
+               GameObject bullet = Instantiate(bulletPrefab, transform.position + 2 * direction, Quaternion.Euler(direction));
+               bullet.GetComponent<BossBullet>().SetEnemy(player);
+   
+               // fire through an interval
+               yield return new WaitForSeconds(fireInterval);
+   
+           }
+           // set indicator inactive
+           fireupIndicator.SetActive(false);
+       }
+   }
+   ```
 
+   ```c#
+   // BossBullet.cs
+   public class BossBullet : MonoBehaviour
+   {
+       // target enemy
+       public GameObject targetEnemy;
+   
+       // move status
+       private float moveSpeed = 15f;
+       private float bulletForce = 5f;
+   
+       // Start is called before the first frame update
+       void Start()
+       {
+           
+       }
+   
+       // Update is called once per frame
+       void Update()
+       {
+           if(targetEnemy != null)
+           {
+               // Use LookAt method to modify direction
+               transform.LookAt(targetEnemy.transform);
+               // move forward
+               transform.Translate(transform.forward * moveSpeed * Time.deltaTime);
+           }
+       }
+       public void SetEnemy(GameObject enemy)
+       {
+           targetEnemy = enemy;
+       }
+   
+       private void OnTriggerEnter(Collider other)
+       {
+           if (other.CompareTag("Player"))
+           {
+               // Debug.Log("Hit Enemy");
+               Rigidbody enemyRb = other.GetComponent<Rigidbody>();
+               Vector3 direction = (other.transform.position - transform.position).normalized;
+               enemyRb.AddForce(direction * bulletForce, ForceMode.Impulse);
+               Destroy(gameObject);
+           }
+       }
+   }
+   ```
 
+   3. 调整SpawnManager，隔一段时间生成一次Boss
 
+      ```
+      IEnumerator WaveBreak()
+          {
+              yield return new WaitForSeconds(3);
+              if (waveHard % 5 == 0)
+              {
+                  spawnCount++;
+                  Instantiate(bossPrefab, GenerateSpawnPosition(), bossPrefab.transform.rotation);
+              }
+              SpawnEnemyWave(waveHard);
+              SpawnPowerupWave(waveHard);
+              nextwave = false;
+          }
+      ```
 
+   4. 顺带调整一下Smash脚本的执行顺序，防止Destroy之后Smash还去找敌人
+
+      ![image-20230729184341992](D:\CS\Unity\Junior Programmer\Create with Code 2\2-Gameplay Mechaincs.assets\image-20230729184341992.png)
 

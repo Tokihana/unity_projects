@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 378543723337383925, guid: 4016df302f982d140800fbda3821da7f, type: 3}
       propertyPath: m_Name
-      value: HarderEnemy Variant
+      value: HarderEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 378543723337383928, guid: 4016df302f982d140800fbda3821da7f, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -30,7 +30,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 378543723337383934, guid: 4016df302f982d140800fbda3821da7f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.94
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 378543723337383934, guid: 4016df302f982d140800fbda3821da7f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -68,7 +68,7 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2755308558967709511}
   m_SourcePrefab: {fileID: 100100000, guid: 4016df302f982d140800fbda3821da7f, type: 3}
---- !u!1 &2556928635561271474 stripped
+--- !u!1 &4327302658658736298 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 378543723337383925, guid: 4016df302f982d140800fbda3821da7f, type: 3}
   m_PrefabInstance: {fileID: 4129081045629757279}
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2556928635561271474}
+  m_GameObject: {fileID: 4327302658658736298}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b12531f5f3a7bf40b0b5f132e1cf8a6, type: 3}

@@ -357,6 +357,8 @@
 "Assets/Challenge 4/Scripts/PlayerControllerX.cs"
 "Assets/Challenge 4/Scripts/RotateCameraX.cs"
 "Assets/Challenge 4/Scripts/SpawnManagerX.cs"
+"Assets/Scripts/BossBullet.cs"
+"Assets/Scripts/BossFire.cs"
 "Assets/Scripts/BulletMove.cs"
 "Assets/Scripts/DestoryPlane.cs"
 "Assets/Scripts/Enemy.cs"

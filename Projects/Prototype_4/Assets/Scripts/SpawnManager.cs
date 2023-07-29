@@ -11,6 +11,9 @@ public class SpawnManager : MonoBehaviour
     private float spawnRange = 9.0f;
     private int spawnCount = 0;
     private int waveHard = 1;
+    private bool nextwave = false;
+
+    public GameObject bossPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -22,13 +25,12 @@ public class SpawnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(spawnCount == 0)
+        if(!nextwave && spawnCount == 0)
         {
-            audioPlayer.GetComponent<PlayAudio>().WavePositive();
             ++waveHard;
-            
-            SpawnEnemyWave(waveHard);
-            SpawnPowerupWave(waveHard);
+            nextwave = true;
+            audioPlayer.GetComponent<PlayAudio>().WavePositive();
+            StartCoroutine(WaveBreak());
         }
     }
 
@@ -43,7 +45,7 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnEnemyWave(int wave)
     {
-        spawnCount += wave;
+        spawnCount = wave;
         for (int i = 0; i < wave; ++i)
         {
             int spawnId = Random.Range(0, enemyPrefabs.Length);
@@ -62,4 +64,16 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    IEnumerator WaveBreak()
+    {
+        yield return new WaitForSeconds(3);
+        if (waveHard % 5 == 0)
+        {
+            spawnCount++;
+            Instantiate(bossPrefab, GenerateSpawnPosition(), bossPrefab.transform.rotation);
+        }
+        SpawnEnemyWave(waveHard);
+        SpawnPowerupWave(waveHard);
+        nextwave = false;
+    }
 }
