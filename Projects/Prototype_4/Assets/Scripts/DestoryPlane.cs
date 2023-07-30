@@ -23,9 +23,9 @@ public class DestoryPlane : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Indicator"))
         {
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
         }
-        else if(other.gameObject.CompareTag("Enemy"))
+        if(other.gameObject.CompareTag("Enemy"))
         {
             // Debug.Log("Destory Enemy");
             Destroy(other.gameObject);
